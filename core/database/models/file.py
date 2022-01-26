@@ -17,4 +17,4 @@ class File(Base):
     users = relationship("UserFilesAssociation", back_populates="file")
 
     def __repr__(self):
-        return f"<File(id={self.ID}, filename={self.Filename})>"
+        return f"<File(id={self.ID}, filename={self.Filename}, filepath={self.Filepath}, users={self.users})>"

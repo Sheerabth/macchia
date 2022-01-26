@@ -14,6 +14,10 @@ class Config:
     DATABASE_HOST = None
     DATABASE_PORT = None
 
+    SECRET_KEY = None
+    ALGORITHM = None
+    ACCESS_TOKEN_EXPIRE_MINUTES = None
+
     @staticmethod
     def configure():
         if not Config.configured:
@@ -26,6 +30,10 @@ class Config:
             Config.DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD")
             Config.DATABASE_HOST = os.getenv("DATABASE_HOST")
             Config.DATABASE_PORT = os.getenv("DATABASE_PORT")
+
+            Config.SECRET_KEY = os.getenv("SECRET_KEY")
+            Config.ALGORITHM = os.getenv("ALGORITHM")
+            Config.ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 
             Config.configured = True
 

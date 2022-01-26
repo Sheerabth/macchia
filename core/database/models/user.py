@@ -1,6 +1,6 @@
 from core.database.models.base import Base
 
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Text
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.postgresql import UUID
 
@@ -12,7 +12,7 @@ class User(Base):
 
     ID = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
     Username = Column(String)
-    Password = Column(String)
+    Password = Column(Text)
 
     files = relationship("UserFilesAssociation", back_populates="user")
 

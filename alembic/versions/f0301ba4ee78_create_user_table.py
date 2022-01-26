@@ -24,7 +24,7 @@ def upgrade():
         'User',
         sa.Column('ID', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
         sa.Column('Username', sa.String(50), nullable=False),
-        sa.Column('Password', sa.String(50), nullable=False),
+        sa.Column('Password', sa.Text, nullable=False),
     )
     op.create_table(
         'File',
@@ -46,3 +46,4 @@ def downgrade():
     op.drop_table('UserFiles')
     op.drop_table('File')
     op.drop_table('User')
+    op.execute("DROP type accessrights")

@@ -6,11 +6,12 @@ from sqlalchemy.orm import relationship
 from uuid import uuid4
 from core.database.models.access_rights_enum import AccessRights
 
+
 class UserFilesAssociation(Base):
     __tablename__ = 'UserFiles'
 
-    UserId = Column(ForeignKey('User.ID'), primary_key=True, default=uuid4)
-    FileId = Column(ForeignKey('File.ID'), primary_key=True, default=uuid4)
+    UserId = Column(ForeignKey('User.ID'), primary_key=True)
+    FileId = Column(ForeignKey('File.ID'), primary_key=True)
     AccessRights = Column(Enum(AccessRights), nullable=False, default=AccessRights.VIEWER)
 
     user = relationship("User", back_populates="files")
