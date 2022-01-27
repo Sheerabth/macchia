@@ -12,7 +12,7 @@ session = Session()
 
 def create_user_dao(new_user: UserCreateSchema) -> UserOutSchema:
     # TODO user with username already exists
-    new_user_db = UserOrm(Username=new_user.username, Password=new_user.password)
+    new_user_db = UserOrm(**dict(new_user))
     session.add(new_user_db)
     session.commit()
     return UserOutSchema.from_orm(new_user_db)
@@ -20,14 +20,14 @@ def create_user_dao(new_user: UserCreateSchema) -> UserOutSchema:
 
 # TODO check if correct
 def get_user_by_username_dao(username: str) -> Union[UserOutSchema, None]:
-    users = list(session.query(UserOrm).filter(UserOrm.Username == username))
+    users = list(session.query(UserOrm).filter(UserOrm.username == username))
     if len(users) == 0:
         return None
     return UserOutSchema.from_orm(users[0])
 
 
 def get_full_user_by_username_dao(username: str) -> Union[UserCreateSchema, None]:
-    users = list(session.query(UserOrm).filter(UserOrm.Username == username))
+    users = list(session.query(UserOrm).filter(UserOrm.username == username))
     if len(users) == 0:
         return None
     return UserCreateSchema.from_orm(users[0])

@@ -3,18 +3,18 @@ import uuid
 
 
 class User(BaseModel):
-    username: str = Field(alias='Username')
+    username: str
 
 
 class UserCreate(User):
-    password: str = Field(alias='Password')
+    password: str
 
     class Config:
         orm_mode = True
 
 
 class UserOut(User):
-    id: uuid.UUID = Field(alias='ID')
+    id: uuid.UUID
 
     class Config:
         orm_mode = True

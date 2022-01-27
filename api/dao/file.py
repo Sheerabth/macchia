@@ -11,7 +11,7 @@ session = Session()
 
 
 def create_file_dao(new_file: FileSchema, file_path) -> FileInDbSchema:
-    file_orm = FileOrm(Filename=new_file.filename, Filepath=file_path)
+    file_orm = FileOrm(**dict(new_file), filepath=file_path)
     session.add(file_orm)
     session.commit()
 
@@ -22,7 +22,7 @@ def link_user_file(user: UserOutSchema, file: FileInDbSchema, access_rights: Acc
     user_orm = session.get(UserOrm, user.id)
     file_orm = session.get(FileOrm, file.id)
 
-    user_file_assoc = UserFilesAssociation(AccessRights=access_rights)
+    user_file_assoc = UserFilesAssociation(access_rights=access_rights)
     user_file_assoc.file = file_orm
     user_file_assoc.user = user_orm
 

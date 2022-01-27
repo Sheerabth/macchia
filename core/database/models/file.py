@@ -8,13 +8,13 @@ from uuid import uuid4
 
 
 class File(Base):
-    __tablename__ = 'File'
+    __tablename__ = 'file'
 
-    ID = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    Filename = Column(Text)
-    Filepath = Column(Text)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    filename = Column(Text)
+    filepath = Column(Text)
 
     users = relationship("UserFilesAssociation", back_populates="file")
 
     def __repr__(self):
-        return f"<File(id={self.ID}, filename={self.Filename}, filepath={self.Filepath}, users={self.users})>"
+        return f"<File(id={self.id}, filename={self.filename}, filepath={self.filepath}, users={self.users})>"

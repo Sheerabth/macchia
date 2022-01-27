@@ -3,12 +3,12 @@ import uuid
 
 
 class File(BaseModel):
-    filename: str = Field(alias='Filename')
+    filename: str
 
 
 class FileInDb(File):
-    id: uuid.UUID = Field(alias="ID")
-    filepath: str = Field(alias='Filepath')
+    id: uuid.UUID
+    filepath: str
 
     class Config:
         orm_mode = True

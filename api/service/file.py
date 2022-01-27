@@ -12,7 +12,7 @@ from core.schemas.user import UserOut
 
 
 async def create_file_service(file_name: str, temp_file: TemporaryFile, user: UserOut):
-    created_file = create_file_dao(FileSchema(Filename=file_name), Config.STORAGE_DIR)
+    created_file = create_file_dao(FileSchema(filename=file_name), Config.STORAGE_DIR)
 
     link_user_file(user, created_file, AccessRights.OWNER)
 

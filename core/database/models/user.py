@@ -8,13 +8,13 @@ from uuid import uuid4
 
 
 class User(Base):
-    __tablename__ = 'User'
+    __tablename__ = 'user'
 
-    ID = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
-    Username = Column(String)
-    Password = Column(Text)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid4)
+    username = Column(String)
+    password = Column(Text)
 
     files = relationship("UserFilesAssociation", back_populates="user")
 
     def __repr__(self):
-        return f"<User(id={self.ID}, name={self.Username}, files = {self.files})>"
+        return f"<User(id={self.id}, name={self.username}, files = {self.files})>"

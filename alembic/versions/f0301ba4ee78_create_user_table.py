@@ -1,4 +1,4 @@
-"""Create User Table
+"""Create User, File and UserFiles Tables
 
 Revision ID: f0301ba4ee78
 Revises: 
@@ -21,29 +21,29 @@ depends_on = None
 
 def upgrade():
     op.create_table(
-        'User',
-        sa.Column('ID', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-        sa.Column('Username', sa.String(50), nullable=False),
-        sa.Column('Password', sa.Text, nullable=False),
+        'user',
+        sa.Column('id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+        sa.Column('username', sa.String(50), nullable=False),
+        sa.Column('password', sa.Text, nullable=False),
     )
     op.create_table(
-        'File',
-        sa.Column('ID', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-        sa.Column('Filename', sa.Text, nullable=False),
-        sa.Column('Filepath', sa.Text, nullable=False),
+        'file',
+        sa.Column('id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+        sa.Column('filename', sa.Text, nullable=False),
+        sa.Column('filepath', sa.Text, nullable=False),
     )
     op.create_table(
-        'UserFiles',
-        sa.Column('UserId', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-        sa.Column('FileId', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
-        sa.Column('AccessRights', sa.Enum(AccessRights), nullable=False, server_default="VIEWER"),
-        sa.ForeignKeyConstraint(['UserId'], ['User.ID']),
-        sa.ForeignKeyConstraint(['FileId'], ['File.ID'])
+        'user_files',
+        sa.Column('user_id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+        sa.Column('file_id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
+        sa.Column('access_rights', sa.Enum(AccessRights), nullable=False, server_default="VIEWER"),
+        sa.ForeignKeyConstraint(['user_id'], ['user.id']),
+        sa.ForeignKeyConstraint(['file_id'], ['file.id'])
     )
 
 
 def downgrade():
-    op.drop_table('UserFiles')
-    op.drop_table('File')
-    op.drop_table('User')
+    op.drop_table('user_files')
+    op.drop_table('file')
+    op.drop_table('user')
     op.execute("DROP type accessrights")
