@@ -2,8 +2,8 @@ from datetime import timedelta
 
 from api.service.user import create_user_service
 from core.schemas.token import Token
-from core.schemas.user import UserCreate, UserOut
-from core.auth import authenticate_user, create_access_token
+from core.schemas.user import UserCreate, UserDb
+from core.auth.auth import authenticate_user, create_access_token
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException, status
 
@@ -29,6 +29,6 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.post("/register", response_model=UserOut)
+@router.post("/register", response_model=UserDb)
 async def register_user(user: UserCreate):
     return create_user_service(user)

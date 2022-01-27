@@ -10,7 +10,7 @@ from jose import JWTError, jwt
 
 from api.service.user import get_user_by_username_service
 from core.schemas.token import TokenData, Token
-from core.schemas.user import User, UserCreate, UserOut
+from core.schemas.user import User, UserCreate, UserDb
 
 from .hash import verify_password
 
@@ -38,7 +38,7 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     return encoded_jwt
 
 
-async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserOut:
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserDb:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",

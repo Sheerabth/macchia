@@ -31,6 +31,8 @@ def upgrade():
         sa.Column('id', UUID(as_uuid=True), primary_key=True, default=uuid.uuid4),
         sa.Column('filename', sa.Text, nullable=False),
         sa.Column('filepath', sa.Text, nullable=False),
+        sa.Column('file_size', sa.BIGINT, nullable=False),
+        sa.Column('created_time', sa.types.TIMESTAMP, nullable=False)
     )
     op.create_table(
         'user_files',

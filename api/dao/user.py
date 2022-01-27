@@ -1,7 +1,7 @@
 from core.database.connection import DatabaseConnection
 from typing import Union, List
 
-from core.schemas.user import UserCreate as UserCreateSchema, UserOut as UserOutSchema, User as UserSchema
+from core.schemas.user import UserCreate as UserCreateSchema, UserDb as UserDbSchema, User as UserSchema
 from core.schemas.file import FileInDb as FileInDbSchema
 
 from core.database.models import User as UserOrm
@@ -10,20 +10,20 @@ Session = DatabaseConnection.get_session()
 session = Session()
 
 
-def create_user_dao(new_user: UserCreateSchema) -> UserOutSchema:
+def create_user_dao(new_user: UserCreateSchema) -> UserDbSchema:
     # TODO user with username already exists
     new_user_db = UserOrm(**dict(new_user))
     session.add(new_user_db)
     session.commit()
-    return UserOutSchema.from_orm(new_user_db)
+    return UserDbSchema.from_orm(new_user_db)
 
 
 # TODO check if correct
-def get_user_by_username_dao(username: str) -> Union[UserOutSchema, None]:
+def get_user_by_username_dao(username: str) -> Union[UserDbSchema, None]:
     users = list(session.query(UserOrm).filter(UserOrm.username == username))
     if len(users) == 0:
         return None
-    return UserOutSchema.from_orm(users[0])
+    return UserDbSchema.from_orm(users[0])
 
 
 def get_full_user_by_username_dao(username: str) -> Union[UserCreateSchema, None]:
@@ -33,7 +33,7 @@ def get_full_user_by_username_dao(username: str) -> Union[UserCreateSchema, None
     return UserCreateSchema.from_orm(users[0])
 
 
-def get_user_files_dao(user: UserOutSchema) -> List[FileInDbSchema]:
+def get_user_files_dao(user: UserDbSchema) -> List[FileInDbSchema]:
     user_orm = session.get(UserOrm, user.id)
     files = []
 

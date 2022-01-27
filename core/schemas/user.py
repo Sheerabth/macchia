@@ -13,7 +13,7 @@ class UserCreate(User):
         orm_mode = True
 
 
-class UserOut(User):
+class UserDb(User):
     id: uuid.UUID
 
     class Config:
