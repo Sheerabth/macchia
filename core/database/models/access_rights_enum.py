@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class AccessRights(Enum):
-    OWNER = 1
-    EDITOR = 2
-    VIEWER = 3
+class AccessRights(str, Enum):
+    OWNER = "OWNER"
+    EDITOR = "EDITOR"
+    VIEWER = "VIEWER"

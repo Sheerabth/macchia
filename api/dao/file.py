@@ -1,8 +1,10 @@
+import uuid
+
 from core.database.connection import DatabaseConnection
 import datetime
 
 from core.schemas.file import File as FileSchema, FileInDb as FileInDbSchema
-from core.schemas.user import UserDb as UserOutSchema
+from core.schemas.user import UserDb as UserDbSchema
 
 from core.database.models import File as FileOrm, User as UserOrm, UserFilesAssociation
 from core.database.models.access_rights_enum import AccessRights
@@ -19,7 +21,7 @@ def create_file_dao(new_file: FileSchema, file_path: str, file_size: int) -> Fil
     return FileInDbSchema.from_orm(file_orm)
 
 
-def link_user_file_dao(user: UserOutSchema, file: FileInDbSchema, access_rights: AccessRights):
+def link_user_file_dao(user: UserDbSchema, file: FileInDbSchema, access_rights: AccessRights):
     user_orm = session.get(UserOrm, user.id)
     file_orm = session.get(FileOrm, file.id)
 
@@ -30,10 +32,25 @@ def link_user_file_dao(user: UserOutSchema, file: FileInDbSchema, access_rights:
     user_orm.files.append(user_file_assoc)
     session.commit()
 
-    print(user_orm)
-    print(file_orm)
+
+def rename_file_by_id_dao(file_id: uuid.UUID, new_name: str):
+    file_orm = session.get(FileOrm, file_id)
+    file_orm.filename = new_name
+    session.commit()
 
 
-# def get_file_by_id_dao(file: )
+def delete_file_by_id_dao(file_id: uuid.UUID):
+    file_orm = session.get(FileOrm, file_id)
+    for assoc in file_orm.users:
+        session.delete(assoc)
+
+    session.delete(file_orm)
+    session.commit()
+
+
+def get_file_by_id_dao(file_id: uuid.UUID):
+    file_orm = session.get(FileOrm, file_id)
+    return FileInDbSchema.from_orm(file_orm)
+
 # TODO
 # def update_file_access_time(file: FileInDbSchema, time: )
