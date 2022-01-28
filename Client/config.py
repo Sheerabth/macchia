@@ -15,6 +15,7 @@ class Config:
             load_dotenv()
 
             Config.SERVER_URL = os.getenv("SERVER_URL")
+            Config.DOWNLOAD_LOCATION = os.getenv("DOWNLOAD_LOCATION")
 
             Config.configured = True
 
