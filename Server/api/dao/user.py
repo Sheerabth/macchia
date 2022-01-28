@@ -1,8 +1,8 @@
 from core.database.connection import DatabaseConnection
-from typing import Union, List
+from typing import Union, List, Optional
 
 from core.schemas.user import UserCreate as UserCreateSchema, UserDb as UserDbSchema, User as UserSchema
-from core.schemas.file import FileInDb as FileInDbSchema
+from core.schemas.file import FileWithPermission as FileWithPermissionSchema, FileInDb as FileInDbSchema
 
 from core.database.models import User as UserOrm, File as FileOrm, UserFilesAssociation
 
@@ -33,14 +33,19 @@ def get_full_user_by_username_dao(username: str) -> Union[UserCreateSchema, None
     return UserCreateSchema.from_orm(users[0])
 
 
-def get_user_files_dao(user: UserDbSchema) -> List[FileInDbSchema]:
-    user_orm = session.get(UserOrm, user.id)
-    files = []
+def get_user_files_dao(user: UserDbSchema, search_pattern: Optional[str]) -> List[FileWithPermissionSchema]:
+    assoc_files = get_user_files_assoc_dao(user)
+    print("SP: ", search_pattern)
+    result = []
+    for assoc in assoc_files:
+        if not search_pattern:
+            result.append(FileWithPermissionSchema(permission=assoc.access_rights, **assoc.file.__dict__))
+        else:
+            if search_pattern in assoc.file.filename:
+                result.append(FileWithPermissionSchema(permission=assoc.access_rights, **assoc.file.__dict__))
 
-    for assoc in user_orm.files:
-        files.append(assoc.file)
-
-    return files
+    print(result)
+    return result
 
 
 def get_user_files_assoc_dao(user: UserDbSchema):

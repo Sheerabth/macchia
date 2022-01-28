@@ -2,6 +2,7 @@ import datetime
 
 from pydantic import BaseModel
 import uuid
+from core.database.models.access_rights_enum import AccessRights
 
 
 class File(BaseModel):
@@ -16,3 +17,7 @@ class FileInDb(File):
 
     class Config:
         orm_mode = True
+
+
+class FileWithPermission(FileInDb):
+    permission: AccessRights
