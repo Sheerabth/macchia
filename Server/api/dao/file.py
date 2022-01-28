@@ -70,5 +70,3 @@ def update_file_size_dao(file_id: uuid.UUID, size: int):
     file_orm.file_size = size
     session.commit()
 
-# TODO
-# def update_file_access_time(file: FileInDbSchema, time: )

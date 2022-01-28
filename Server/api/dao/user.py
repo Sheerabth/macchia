@@ -1,3 +1,5 @@
+import sqlalchemy.exc
+
 from core.database.connection import DatabaseConnection
 from typing import Union, List, Optional
 
@@ -5,16 +7,21 @@ from core.schemas.user import UserCreate as UserCreateSchema, UserDb as UserDbSc
 from core.schemas.file import FileWithPermission as FileWithPermissionSchema, FileInDb as FileInDbSchema
 
 from core.database.models import User as UserOrm, File as FileOrm, UserFilesAssociation
+from core.exceptions import BadRequestException
 
 Session = DatabaseConnection.get_session()
 session = Session()
 
 
 def create_user_dao(new_user: UserCreateSchema) -> UserDbSchema:
-    # TODO user with username already exists
     new_user_db = UserOrm(**dict(new_user))
-    session.add(new_user_db)
-    session.commit()
+
+    try:
+        session.add(new_user_db)
+        session.commit()
+    except sqlalchemy.exc.IntegrityError:
+        raise BadRequestException(message="The username already exists")
+
     return UserDbSchema.from_orm(new_user_db)
 
 
