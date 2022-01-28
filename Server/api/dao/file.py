@@ -33,6 +33,18 @@ def link_user_file_dao(user: UserDbSchema, file: FileInDbSchema, access_rights: 
     session.commit()
 
 
+def unlink_user_file_dao(user: UserDbSchema, file: FileInDbSchema):
+    user_orm = session.get(UserOrm, user.id)
+    file_orm = session.get(FileOrm, file.id)
+
+    assoc = session.get(UserFilesAssociation, (user_orm.id, file_orm.id))
+    if assoc is None:
+        return
+
+    session.delete(assoc)
+    session.commit()
+
+
 def rename_file_by_id_dao(file_id: uuid.UUID, new_name: str):
     file_orm = session.get(FileOrm, file_id)
     file_orm.filename = new_name
@@ -51,6 +63,12 @@ def delete_file_by_id_dao(file_id: uuid.UUID):
 def get_file_by_id_dao(file_id: uuid.UUID):
     file_orm = session.get(FileOrm, file_id)
     return FileInDbSchema.from_orm(file_orm)
+
+
+def update_file_size_dao(file_id: uuid.UUID, size: int):
+    file_orm = session.get(FileOrm, file_id)
+    file_orm.file_size = size
+    session.commit()
 
 # TODO
 # def update_file_access_time(file: FileInDbSchema, time: )

@@ -4,6 +4,7 @@ from core.auth.hash import get_password_hash
 
 from typing import Optional
 
+
 def get_user_by_username_service(username: str) -> UserDb:
     return get_user_by_username_dao(username)
 

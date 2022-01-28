@@ -18,7 +18,6 @@ def create_user_dao(new_user: UserCreateSchema) -> UserDbSchema:
     return UserDbSchema.from_orm(new_user_db)
 
 
-# TODO check if correct
 def get_user_by_username_dao(username: str) -> Union[UserDbSchema, None]:
     users = list(session.query(UserOrm).filter(UserOrm.username == username))
     if len(users) == 0:
@@ -33,9 +32,8 @@ def get_full_user_by_username_dao(username: str) -> Union[UserCreateSchema, None
     return UserCreateSchema.from_orm(users[0])
 
 
-def get_user_files_dao(user: UserDbSchema, search_pattern: Optional[str]) -> List[FileWithPermissionSchema]:
+def get_user_files_dao(user: UserDbSchema, search_pattern: Optional[str] = None) -> List[FileWithPermissionSchema]:
     assoc_files = get_user_files_assoc_dao(user)
-    print("SP: ", search_pattern)
     result = []
     for assoc in assoc_files:
         if not search_pattern:
@@ -44,7 +42,6 @@ def get_user_files_dao(user: UserDbSchema, search_pattern: Optional[str]) -> Lis
             if search_pattern in assoc.file.filename:
                 result.append(FileWithPermissionSchema(permission=assoc.access_rights, **assoc.file.__dict__))
 
-    print(result)
     return result
 
 
@@ -59,5 +56,4 @@ def get_assoc_dao(user: UserDbSchema, file: FileInDbSchema):
     assoc = session.get(UserFilesAssociation, (user_orm.id, file_orm.id))
     session.commit()
 
-    print(assoc)
     return assoc
