@@ -1,5 +1,6 @@
 import uuid
 
+from api.dao.user import get_assoc_dao
 from core.database.connection import DatabaseConnection
 import datetime
 
@@ -70,3 +71,10 @@ def update_file_size_dao(file_id: uuid.UUID, size: int):
     file_orm.file_size = size
     session.commit()
 
+
+def update_permission_dao(user: UserDbSchema, file: FileInDbSchema, new_permission: AccessRights):
+    assoc = get_assoc_dao(user, file)
+    assoc.access_rights = new_permission
+    session.commit()
+    # session.refresh(assoc)
+    print("Session committed")

@@ -1,0 +1,26 @@
+from exceptions.server import ServerException
+from web.file import share_file
+from user_files import UserFiles
+import typer
+import json
+
+
+def share():
+    selected_file = UserFiles.prompt_file()
+
+    username = typer.prompt("Enter username to share with")
+    permissions = {"O": "OWNER", "E": "EDITOR", "V": "VIEWER"}
+
+    while True:
+        permission = typer.prompt("Enter access permission (O - OWNER, E - EDITOR, V - VIEWER)")
+
+        permission = permission.upper()
+        if permission not in permissions.keys():
+            typer.echo(typer.style("Invalid input, enter one of O/E/V", fg=typer.colors.RED, bold=True))
+        else:
+            break
+
+    resp = share_file(selected_file['id'], username, permissions[permission])
+
+    if resp.status_code != 200:
+        raise ServerException(json.loads(resp.text)["detail"])

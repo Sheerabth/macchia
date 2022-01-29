@@ -32,6 +32,37 @@ def upload_file(file_path: str):
 
     session = UserSession.get_session()
     resp = session.post(Config.SERVER_URL + f"/file/{file_name}", files=files)
-    print(resp)
+    return resp
     # multipart_monitor = encoder.MultipartEncoderMonitor(multipart_encoder)
 
+
+def rename_file(file_id, new_name):
+    session = UserSession.get_session()
+    json_body = {"filename": new_name}
+    resp = session.put(Config.SERVER_URL + f"/file/rename/{file_id}", json=json_body)
+    return resp
+
+
+def delete_file(file_id):
+    session = UserSession.get_session()
+
+    resp = session.delete(Config.SERVER_URL + f"/file/{file_id}")
+    return resp
+
+
+def share_file(file_id, username, permission):
+    json_req = {"username": username, "permission": permission}
+
+    session = UserSession.get_session()
+    resp = session.put(Config.SERVER_URL + f"/file/share/{file_id}", json=json_req)
+
+    return resp
+
+
+def revoke_file(file_id, username):
+    json_req = {"username": username}
+
+    session = UserSession.get_session()
+    resp = session.put(Config.SERVER_URL + f"/file/revoke/{file_id}", json=json_req)
+
+    return resp

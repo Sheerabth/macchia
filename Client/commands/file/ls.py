@@ -4,7 +4,7 @@ import json
 from exceptions.server import ServerException
 from tabulate import tabulate
 from dateutil import parser
-from humanize import naturalsize, naturaldate
+from humanize import naturalsize
 
 
 def ls(search_pattern: str = typer.Argument(None), long_list: bool = typer.Option(False, "-l")):

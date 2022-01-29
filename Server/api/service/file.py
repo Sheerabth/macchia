@@ -11,9 +11,9 @@ from core.database.models.access_rights_enum import AccessRights
 
 from core.schemas.file import File as FileSchema, FileInDb
 from core.schemas.permission import Permission
-from core.schemas.user import UserDb
+from core.schemas.user import User, UserDb
 
-from core.exceptions import NotFoundException, ForbiddenException
+from core.exceptions import NotFoundException, ForbiddenException, BadRequestException
 
 import shutil
 
@@ -71,28 +71,36 @@ async def rename_file_service(file_id: uuid.UUID, file_rename: FileSchema, user:
         raise NotFoundException()
 
 
-async def share_file_service(file_id: uuid.UUID, current_user: UserDb, permissions: List[Permission]):
+async def share_file_service(file_id: uuid.UUID, current_user: UserDb, permission: Permission):
     file_schema = file_dao.get_file_by_id_dao(file_id)
     assoc = user_dao.get_assoc_dao(current_user, file_schema)
 
     if assoc.access_rights != AccessRights.OWNER:
         raise ForbiddenException()
 
-    for permission in permissions:
-        shared_user_schema = user_dao.get_user_by_username_dao(permission.username)
+    shared_user_schema = user_dao.get_user_by_username_dao(permission.username)
+
+    shared_user_assoc = user_dao.get_assoc_dao(shared_user_schema, file_schema)
+    if not shared_user_assoc:
         file_dao.link_user_file_dao(shared_user_schema, file_schema, permission.permission)
+    else:
+        file_dao.update_permission_dao(shared_user_schema, file_schema, permission.permission)
 
 
-async def revoke_file_service(file_id: uuid.UUID, current_user: UserDb, usernames: List[str]):
+async def revoke_file_service(file_id: uuid.UUID, current_user: UserDb, revoked_user: User):
     file_schema = file_dao.get_file_by_id_dao(file_id)
     assoc = user_dao.get_assoc_dao(current_user, file_schema)
 
     if assoc.access_rights != AccessRights.OWNER:
         raise ForbiddenException()
 
-    for username in usernames:
-        revoke_user_schema = user_dao.get_user_by_username_dao(username)
-        file_dao.unlink_user_file_dao(revoke_user_schema, file_schema)
+    revoke_user_schema = user_dao.get_user_by_username_dao(revoked_user.username)
+    revoked_user_assoc = user_dao.get_assoc_dao(revoke_user_schema, file_schema)
+
+    if not revoked_user_assoc:
+        raise BadRequestException(message="Invalid revoke, file not shared to user")
+
+    file_dao.unlink_user_file_dao(revoke_user_schema, file_schema)
 
 
 async def delete_file_by_id_service(file_id: uuid.UUID, user: UserDb):

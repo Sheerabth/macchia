@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse
 import api.service.file as file_service
 from core.schemas.file import File
 
-from core.schemas.user import UserDb
+from core.schemas.user import UserDb, User
 from core.auth.auth import get_current_user
 
 from typing import List
@@ -38,13 +38,13 @@ async def update_file(file_id: UUID, file: UploadFile, current_user: UserDb = De
 
 
 @router.put("/share/{file_id}")
-async def share_file(file_id: UUID, permissions: List[Permission], current_user: UserDb = Depends(get_current_user)):
-    await file_service.share_file_service(file_id, current_user, permissions)
+async def share_file(file_id: UUID, permission: Permission, current_user: UserDb = Depends(get_current_user)):
+    await file_service.share_file_service(file_id, current_user, permission)
 
 
 @router.put("/revoke/{file_id}")
-async def revoke_file(file_id: UUID, usernames: List[str], current_user: UserDb = Depends(get_current_user)):
-    await file_service.revoke_file_service(file_id, current_user, usernames)
+async def revoke_file(file_id: UUID, revoked_user: User, current_user: UserDb = Depends(get_current_user)):
+    await file_service.revoke_file_service(file_id, current_user, revoked_user)
 
 
 @router.put("/rename/{file_id}")

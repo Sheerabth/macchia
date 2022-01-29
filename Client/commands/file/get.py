@@ -1,4 +1,3 @@
-import typer
 from web.file import download_file
 from user_files import UserFiles
 
