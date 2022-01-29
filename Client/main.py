@@ -9,6 +9,7 @@ from commands.auth.register import register_user as register
 from commands.auth.login import login_user as login
 from commands.file.ls import ls
 from commands.file.get import get
+from commands.file.put import put
 
 from config import Config
 Config.configure()
@@ -19,6 +20,7 @@ app.command(name="register")(register)
 app.command(name="login")(login)
 app.command(name="ls")(ls)
 app.command(name="get")(get)
+app.command(name="put")(put)
 
 
 @app.command()

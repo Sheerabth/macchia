@@ -3,6 +3,7 @@ from web.user import get_user_files
 import json
 from exceptions.server import ServerException
 from tabulate import tabulate
+from dateutil import parser
 from humanize import naturalsize, naturaldate
 
 
@@ -21,7 +22,7 @@ def ls(search_pattern: str = typer.Argument(None), long_list: bool = typer.Optio
 
         for d in json_resp:
             d["file_size"] = naturalsize(d["file_size"])
-            d["created_time"] = naturaldate(d["created_time"])
+            d["created_time"] = parser.parse(d["created_time"]).strftime("%d %b %Y %H:%M")
 
         for d in json_resp:
             file_table.append(tuple([d[x] for x in fields]))

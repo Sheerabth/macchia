@@ -8,7 +8,6 @@ class Config:
 
     SERVER_URL = None
 
-
     @staticmethod
     def configure():
         if not Config.configured:
