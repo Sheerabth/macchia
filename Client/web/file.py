@@ -2,6 +2,7 @@ from user_session import UserSession
 from config import Config
 import os
 import typer
+import click_spinner
 
 from requests_toolbelt.multipart import encoder
 
@@ -15,25 +16,18 @@ def download_file(file_id, file_name, file_size):
     with session.get(req_url, stream=True) as r:
         r.raise_for_status()
         with open(local_filename, 'wb') as f:
-            with typer.progressbar(length=file_size) as progress:
+            with click_spinner.spinner():
                 for chunk in r.iter_content(chunk_size=8192):
                     f.write(chunk)
-                    progress.update(len(chunk))
 
 
 def upload_file(file_path: str):
     file_name = os.path.basename(file_path)
-    # multipart_encoder = encoder.MultipartEncoder(
-    #     fields={
-    #         'file': open(file_path, 'rb')
-    #     }
-    # )
     files = {'file': open(file_path, 'rb')}
 
     session = UserSession.get_session()
     resp = session.post(Config.SERVER_URL + f"/file/{file_name}", files=files)
     return resp
-    # multipart_monitor = encoder.MultipartEncoderMonitor(multipart_encoder)
 
 
 def rename_file(file_id, new_name):
@@ -47,6 +41,14 @@ def delete_file(file_id):
     session = UserSession.get_session()
 
     resp = session.delete(Config.SERVER_URL + f"/file/{file_id}")
+    return resp
+
+
+def update_file(file_path: str, file_id):
+    files = {'file': open(file_path, 'rb')}
+
+    session = UserSession.get_session()
+    resp = session.put(Config.SERVER_URL + f"/file/{file_id}", files=files)
     return resp
 
 

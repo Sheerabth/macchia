@@ -16,6 +16,7 @@ from core.schemas.user import User, UserDb
 from core.exceptions import NotFoundException, ForbiddenException, BadRequestException
 
 import shutil
+import gzip
 
 
 async def create_file_service(file_name: str, temp_file: TemporaryFile, user: UserDb):
@@ -23,7 +24,7 @@ async def create_file_service(file_name: str, temp_file: TemporaryFile, user: Us
     file_dao.link_user_file_dao(user, created_file, AccessRights.OWNER)
 
     full_file_path = os.path.join(Config.STORAGE_DIR, str(created_file.id))
-    shutil.copyfileobj(temp_file.file, open(full_file_path, "wb"))
+    shutil.copyfileobj(temp_file.file, gzip.open(full_file_path, "wb"))
 
     file_size = os.path.getsize(full_file_path)
     file_dao.update_file_size_dao(created_file.id, file_size)
@@ -47,7 +48,7 @@ async def update_file_service(file_id: uuid.UUID, temp_file: TemporaryFile, curr
     assoc = user_dao.get_assoc_dao(current_user, file_to_update)
     if assoc.access_rights == AccessRights.OWNER or assoc.access_rights == AccessRights.EDITOR:
         full_file_path = os.path.join(file_to_update.filepath, str(file_to_update.id))
-        shutil.copyfileobj(temp_file.file, open(full_file_path, "wb"))
+        shutil.copyfileobj(temp_file.file, gzip.open(full_file_path, "wb"))
 
         file_size = os.path.getsize(full_file_path)
         file_dao.update_file_size_dao(file_to_update.id, file_size)

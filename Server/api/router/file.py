@@ -1,10 +1,12 @@
 from uuid import UUID
 import os
+import urllib
 
 from fastapi import APIRouter, UploadFile, Depends, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 
 import api.service.file as file_service
+import gzip
 from core.schemas.file import File
 
 from core.schemas.user import UserDb, User
@@ -29,7 +31,17 @@ async def download_file(file_id: UUID, current_user: UserDb = Depends(get_curren
     file = await file_service.get_file_by_id_service(file_id, current_user)
     if not file:
         raise NotFoundException()
-    return FileResponse(path=os.path.join(file.filepath, str(file.id)), filename=file.filename)
+
+    def file_stream_generator(file_to_stream):
+        full_file_path = os.path.join(file_to_stream.filepath, str(file_to_stream.id))
+
+        with gzip.open(full_file_path, 'rb') as f:
+            yield from f
+
+    encoded_filename = urllib.parse.quote(file.filename)
+    return StreamingResponse(file_stream_generator(file),
+                             headers={"Content-Disposition": f"attachment; filename={encoded_filename}"})
+    # return FileResponse(path=os.path.join(file.filepath, str(file.id)), filename=file.filename)
 
 
 @router.put("/{file_id}")

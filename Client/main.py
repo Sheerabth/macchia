@@ -16,6 +16,7 @@ from commands.file.rename import rename
 from commands.file.delete import delete
 from commands.file.share import share
 from commands.file.revoke import revoke
+from commands.file.update import update
 
 
 from config import Config
@@ -34,6 +35,7 @@ app.command(name="rename")(rename)
 app.command(name="delete")(delete)
 app.command(name="share")(share)
 app.command(name="revoke")(revoke)
+app.command(name="update")(update)
 
 
 @app.command()
@@ -48,10 +50,3 @@ def myrepl(ctx: typer.Context):
 
 if __name__ == "__main__":
     app()
-
-# typer_click_object = typer.main.get_command(app)
-#
-# typer_click_object.add_command(get, "get")
-#
-# if __name__ == "__main__":
-#     typer_click_object()
