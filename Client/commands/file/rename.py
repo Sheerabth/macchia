@@ -7,6 +7,9 @@ from web.file import rename_file
 
 
 def rename():
+    """
+    Rename a file on the blob storage
+    """
     selected_file = UserFiles.prompt_file()
 
     new_name = typer.prompt("Enter new name of file")

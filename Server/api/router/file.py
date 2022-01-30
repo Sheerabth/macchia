@@ -3,7 +3,7 @@ import os
 import urllib
 
 from fastapi import APIRouter, UploadFile, Depends
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 
 import api.service.file as file_service
 import gzip
@@ -35,7 +35,6 @@ async def download_file(file_id: UUID, current_user: UserDb = Depends(get_curren
         full_file_path = os.path.join(file_to_stream.filepath, str(file_to_stream.id))
 
         with gzip.open(full_file_path, 'rb') as f:
-            # yield from f
             while True:
                 content = f.read(block_size)
                 if not content:
@@ -45,8 +44,6 @@ async def download_file(file_id: UUID, current_user: UserDb = Depends(get_curren
     encoded_filename = urllib.parse.quote(file.filename)
     return StreamingResponse(file_stream_generator(file, 8192),
                              headers={"Content-Disposition": f"attachment; filename={encoded_filename}"})
-    # FileResponse()
-    # return FileResponse(path=os.path.join(file.filepath, str(file.id)), filename=file.filename)
 
 
 @router.put("/{file_id}")

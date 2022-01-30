@@ -6,6 +6,9 @@ import typer
 
 
 def revoke():
+    """
+    Revoke access for a user to whom a file had been shared
+    """
     selected_file = UserFiles.prompt_file()
 
     username = typer.prompt("Enter username to revoke access")

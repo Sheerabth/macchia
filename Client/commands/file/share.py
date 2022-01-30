@@ -6,6 +6,9 @@ import json
 
 
 def share():
+    """
+    Share a file in the blob storage to another user
+    """
     selected_file = UserFiles.prompt_file()
 
     username = typer.prompt("Enter username to share with")

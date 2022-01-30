@@ -12,8 +12,12 @@ def update(file_path: Path = typer.Argument(...,
                                             file_okay=True,
                                             dir_okay=False,
                                             readable=True,
-                                            resolve_path=True
+                                            resolve_path=True,
+                                            help="The path of the file that should update the existing file"
                                             )):
+    """
+    Update an existing file in the blob storage with another file
+    """
     selected_file = UserFiles.prompt_file()
     resp = update_file(str(file_path), selected_file['id'])
 
