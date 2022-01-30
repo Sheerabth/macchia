@@ -26,7 +26,6 @@ async def create_file_service(file_name: str, file: Request, user: UserDb) -> Fi
     file_dao.link_user_file_dao(user, created_file, AccessRights.OWNER)
 
     full_file_path = os.path.join(Config.STORAGE_DIR, str(created_file.id))
-    # shutil.copyfileobj(temp_file.file, gzip.open(full_file_path, "wb"))
 
     compressed_file = gzip.open(full_file_path, "wb")
     async for chunk in file.stream():
@@ -50,13 +49,16 @@ async def get_file_by_id_service(file_id: uuid.UUID, current_user: UserDb) -> Fi
     raise NotFoundException()
 
 
-async def update_file_service(file_id: uuid.UUID, temp_file: TemporaryFile, current_user: UserDb):
+async def update_file_service(file_id: uuid.UUID, file: Request, current_user: UserDb):
     file_to_update = file_dao.get_file_by_id_dao(file_id)
 
     assoc = user_dao.get_assoc_dao(current_user, file_to_update)
     if assoc.access_rights == AccessRights.OWNER or assoc.access_rights == AccessRights.EDITOR:
         full_file_path = os.path.join(file_to_update.filepath, str(file_to_update.id))
-        shutil.copyfileobj(temp_file.file, gzip.open(full_file_path, "wb"))
+
+        compressed_file = gzip.open(full_file_path, "wb")
+        async for chunk in file.stream():
+            compressed_file.write(chunk)
 
         file_size = os.path.getsize(full_file_path)
         file_dao.update_file_size_dao(file_to_update.id, file_size)

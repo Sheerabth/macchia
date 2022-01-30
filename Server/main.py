@@ -37,9 +37,4 @@ app.include_router(user.router, prefix="/user")
 app.include_router(auth.router)
 
 
-@app.get("/test")
-def test():
-    a = 1 / 0
-
-
 uvicorn.run(app, host="0.0.0.0", port=4567, log_config=Config.LOGGER_CONF)

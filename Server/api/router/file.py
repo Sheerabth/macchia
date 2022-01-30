@@ -47,7 +47,7 @@ async def download_file(file_id: UUID, current_user: UserDb = Depends(get_curren
 
 
 @router.put("/{file_id}")
-async def update_file(file_id: UUID, file: UploadFile, current_user: UserDb = Depends(get_current_user)):
+async def update_file(file_id: UUID, file: Request, current_user: UserDb = Depends(get_current_user)):
     await file_service.update_file_service(file_id, file, current_user)
 
 

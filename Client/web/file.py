@@ -20,7 +20,6 @@ def download_file(file_id, file_name):
 
 def upload_file(file_path: str):
     file_name = os.path.basename(file_path)
-    # files = {'file': open(file_path, 'rb')}
 
     session = UserSession.get_session()
     with click_spinner.spinner():
@@ -45,11 +44,11 @@ def delete_file(file_id):
 
 
 def update_file(file_path: str, file_id):
-    files = {'file': open(file_path, 'rb')}
-
     session = UserSession.get_session()
     with click_spinner.spinner():
-        resp = session.put(Config.SERVER_URL + f"/file/{file_id}", files=files)
+        with open(file_path, 'rb') as file:
+            resp = session.put(Config.SERVER_URL + f"/file/{file_id}", data=file)
+
     return resp
 
 
