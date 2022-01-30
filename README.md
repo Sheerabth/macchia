@@ -42,9 +42,10 @@ The server compresses files using gzip compression before writing them to disk.
 4. Create a virtual environment using *virtualenv* with Python 3.8
 5. Activate the virtual environment
 6. Install dependencies using ``pip install -r requirements.txt``
-7. Create a file ``.env`` with the necessary configuration information. A sample ``.env.example`` is provided in the repository
-8. Start the server with ``python main.py``
-9. Done!
+7. Run ``alembic upgrade head`` to create the necessary tables in the database
+8. Create a file ``.env`` with the necessary configuration information. A sample ``.env.example`` is provided in the repository
+9. Start the server with ``python main.py``
+10. Done!
 
 ### Client
 
@@ -65,7 +66,9 @@ The server compresses files using gzip compression before writing them to disk.
 9. Done! The client can be terminated by pressing ``Ctrl + D``
 
 
+## Database Design
 
+![Database Diagram](/readme-assets/ER_BlobStorage.png)
 
 
 
