@@ -1,4 +1,4 @@
-from user_files import UserFiles
+from session.user_files import UserFiles
 from web.file import update_file
 import typer
 from pathlib import Path
@@ -15,7 +15,7 @@ def update(file_path: Path = typer.Argument(...,
                                             resolve_path=True
                                             )):
     selected_file = UserFiles.prompt_file()
-    resp = update_file(file_path, selected_file['id'])
+    resp = update_file(str(file_path), selected_file['id'])
 
     if resp.status_code != 200:
         raise ServerException(json.loads(resp.text)["detail"])

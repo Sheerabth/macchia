@@ -2,7 +2,6 @@ import os
 from tempfile import TemporaryFile
 
 import uuid
-from typing import Union, List
 import api.dao.file as file_dao
 import api.dao.user as user_dao
 from config import Config
@@ -19,7 +18,7 @@ import shutil
 import gzip
 
 
-async def create_file_service(file_name: str, temp_file: TemporaryFile, user: UserDb):
+async def create_file_service(file_name: str, temp_file: TemporaryFile, user: UserDb) -> FileInDb:
     created_file = file_dao.create_file_dao(FileSchema(filename=file_name), Config.STORAGE_DIR, -1)
     file_dao.link_user_file_dao(user, created_file, AccessRights.OWNER)
 
@@ -32,14 +31,14 @@ async def create_file_service(file_name: str, temp_file: TemporaryFile, user: Us
     return file_dao.get_file_by_id_dao(created_file.id)
 
 
-async def get_file_by_id_service(file_id: uuid.UUID, user: UserDb) -> Union[FileInDb, None]:
+async def get_file_by_id_service(file_id: uuid.UUID, user: UserDb) -> FileInDb:
     user_files = user_dao.get_user_files_dao(user)
     print(user_files)
     for file in user_files:
         if file.id == file_id:
             return file
 
-    return None
+    raise NotFoundException()
 
 
 async def update_file_service(file_id: uuid.UUID, temp_file: TemporaryFile, current_user: UserDb):
@@ -76,15 +75,24 @@ async def share_file_service(file_id: uuid.UUID, current_user: UserDb, permissio
     file_schema = file_dao.get_file_by_id_dao(file_id)
     assoc = user_dao.get_assoc_dao(current_user, file_schema)
 
+    if not assoc:
+        raise NotFoundException()
+
     if assoc.access_rights != AccessRights.OWNER:
         raise ForbiddenException()
 
+    # To check if the file has already been shared to the user
     shared_user_schema = user_dao.get_user_by_username_dao(permission.username)
+    if not shared_user_schema:
+        raise BadRequestException(message="The specified user does not exist")
 
     shared_user_assoc = user_dao.get_assoc_dao(shared_user_schema, file_schema)
+
     if not shared_user_assoc:
+        # If not already shared, create a new entry
         file_dao.link_user_file_dao(shared_user_schema, file_schema, permission.permission)
     else:
+        # If already shared, update the existing entry
         file_dao.update_permission_dao(shared_user_schema, file_schema, permission.permission)
 
 
@@ -92,10 +100,16 @@ async def revoke_file_service(file_id: uuid.UUID, current_user: UserDb, revoked_
     file_schema = file_dao.get_file_by_id_dao(file_id)
     assoc = user_dao.get_assoc_dao(current_user, file_schema)
 
+    if not assoc:
+        raise NotFoundException()
+
     if assoc.access_rights != AccessRights.OWNER:
         raise ForbiddenException()
 
     revoke_user_schema = user_dao.get_user_by_username_dao(revoked_user.username)
+    if not revoke_user_schema:
+        raise BadRequestException(message="The specified user does not exist")
+
     revoked_user_assoc = user_dao.get_assoc_dao(revoke_user_schema, file_schema)
 
     if not revoked_user_assoc:

@@ -1,8 +1,7 @@
 import json
-import typer
 
 from exceptions.server import ServerException
-from user_files import UserFiles
+from session.user_files import UserFiles
 from web.file import delete_file
 
 

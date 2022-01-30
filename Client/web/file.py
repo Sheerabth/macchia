@@ -1,13 +1,10 @@
-from user_session import UserSession
+from session.user_session import UserSession
 from config import Config
 import os
-import typer
 import click_spinner
 
-from requests_toolbelt.multipart import encoder
 
-
-def download_file(file_id, file_name, file_size):
+def download_file(file_id, file_name):
     session = UserSession.get_session()
 
     local_filename = os.path.join(Config.DOWNLOAD_LOCATION, file_name)
@@ -26,7 +23,8 @@ def upload_file(file_path: str):
     files = {'file': open(file_path, 'rb')}
 
     session = UserSession.get_session()
-    resp = session.post(Config.SERVER_URL + f"/file/{file_name}", files=files)
+    with click_spinner.spinner():
+        resp = session.post(Config.SERVER_URL + f"/file/{file_name}", files=files)
     return resp
 
 
@@ -48,7 +46,8 @@ def update_file(file_path: str, file_id):
     files = {'file': open(file_path, 'rb')}
 
     session = UserSession.get_session()
-    resp = session.put(Config.SERVER_URL + f"/file/{file_id}", files=files)
+    with click_spinner.spinner():
+        resp = session.put(Config.SERVER_URL + f"/file/{file_id}", files=files)
     return resp
 
 

@@ -21,6 +21,7 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 target_metadata = None
 
+
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
@@ -41,7 +42,11 @@ def run_migrations_offline():
     """
 
     UserConfig.configure()
-    url = f"postgresql://{UserConfig.DATABASE_USER}:{UserConfig.DATABASE_PORT}@{UserConfig.DATABASE_HOST}:{UserConfig.DATABASE_PASSWORD}/{UserConfig.DATABASE_NAME}"
+    url = "postgresql://{}:{}@{}:{}/{}".format(UserConfig.DATABASE_USER,
+                                               UserConfig.DATABASE_PASSWORD,
+                                               UserConfig.DATABASE_HOST,
+                                               UserConfig.DATABASE_PORT,
+                                               UserConfig.DATABASE_NAME)
 
     context.configure(
         url=url,
@@ -68,7 +73,12 @@ def run_migrations_online():
     # )
 
     UserConfig.configure()
-    url = f"postgresql://{UserConfig.DATABASE_USER}:{UserConfig.DATABASE_PASSWORD}@{UserConfig.DATABASE_HOST}:{UserConfig.DATABASE_PORT}/{UserConfig.DATABASE_NAME}"
+
+    url = "postgresql://{}:{}@{}:{}/{}".format(UserConfig.DATABASE_USER,
+                                               UserConfig.DATABASE_PASSWORD,
+                                               UserConfig.DATABASE_HOST,
+                                               UserConfig.DATABASE_PORT,
+                                               UserConfig.DATABASE_NAME)
     connectable = create_engine(url)
 
     with connectable.connect() as connection:

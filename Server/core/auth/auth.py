@@ -1,18 +1,18 @@
 from datetime import datetime, timedelta
 from typing import Optional
 
-from api.dao.user import get_full_user_by_username_dao
+from api.dao.user import get_full_user_by_username_dao, get_user_by_username_dao
 from config import Config
 
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
-from api.service.user import get_user_by_username_service
-from core.schemas.token import TokenData, Token
-from core.schemas.user import User, UserCreate, UserDb
+from core.schemas.token import TokenData
+from core.schemas.user import UserDb
 
 from .hash import verify_password
+from ..exceptions.auth_exception import AuthException
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -39,21 +39,17 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserDb:
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
     try:
         payload = jwt.decode(token, Config.SECRET_KEY, algorithms=[Config.ALGORITHM])
         username: str = payload.get("sub")
         if username is None:
-            raise credentials_exception
+            raise AuthException(message="Invalid token detected")
         token_data = TokenData(username=username)
     except JWTError:
-        raise credentials_exception
-    user = get_user_by_username_service(username=token_data.username)
+        raise AuthException(message="Invalid token detected")
+
+    user = get_user_by_username_dao(username=token_data.username)
     if user is None:
-        raise credentials_exception
+        raise AuthException(message="Invalid token detected")
     return user
 

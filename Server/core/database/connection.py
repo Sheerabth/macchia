@@ -12,8 +12,11 @@ class DatabaseConnection:
         if DatabaseConnection.connection is None:
             DatabaseConnection()
 
-            connection_string = f"postgresql://{Config.DATABASE_USER}:{Config.DATABASE_PASSWORD}@" \
-                                f"{Config.DATABASE_HOST}:{Config.DATABASE_PORT}/{Config.DATABASE_NAME}"
+            connection_string = "postgresql://{}:{}@{}:{}/{}".format(Config.DATABASE_USER,
+                                                                     Config.DATABASE_PASSWORD,
+                                                                     Config.DATABASE_HOST,
+                                                                     Config.DATABASE_PORT,
+                                                                     Config.DATABASE_NAME)
 
             engine = create_engine(connection_string, echo=False, future=True)
             DatabaseConnection.session = sessionmaker(bind=engine)

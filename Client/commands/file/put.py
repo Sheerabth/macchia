@@ -13,7 +13,7 @@ def put(file_path: Path = typer.Argument(...,
                                          readable=True,
                                          resolve_path=True
                                          )):
-    resp = upload_file(file_path)
+    resp = upload_file(str(file_path))
 
     if resp.status_code != 200:
         raise ServerException(json.loads(resp.text)["detail"])

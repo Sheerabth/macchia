@@ -52,12 +52,12 @@ def get_user_files_dao(user: UserDbSchema, search_pattern: Optional[str] = None)
     return result
 
 
-def get_user_files_assoc_dao(user: UserDbSchema):
+def get_user_files_assoc_dao(user: UserDbSchema) -> List[UserFilesAssociation]:
     user_orm = session.get(UserOrm, user.id)
     return list(user_orm.files)
 
 
-def get_assoc_dao(user: UserDbSchema, file: FileInDbSchema):
+def get_assoc_dao(user: UserDbSchema, file: FileInDbSchema) -> Union[UserFilesAssociation, None]:
     user_orm = session.get(UserOrm, user.id)
     file_orm = session.get(FileOrm, file.id)
     assoc = session.get(UserFilesAssociation, (user_orm.id, file_orm.id))

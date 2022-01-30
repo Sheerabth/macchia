@@ -1,5 +1,5 @@
 import json
-from user_session import UserSession
+from .user_session import UserSession
 from config import Config
 from tabulate import tabulate
 import typer

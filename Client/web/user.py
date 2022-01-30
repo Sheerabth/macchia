@@ -1,5 +1,4 @@
-import requests
-from user_session import UserSession
+from session.user_session import UserSession
 from config import Config
 from typing import Optional
 

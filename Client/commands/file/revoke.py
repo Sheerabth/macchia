@@ -1,7 +1,7 @@
 import json
 from exceptions.server import ServerException
 from web.file import revoke_file
-from user_files import UserFiles
+from session.user_files import UserFiles
 import typer
 
 

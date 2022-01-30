@@ -18,6 +18,7 @@ from commands.file.share import share
 from commands.file.revoke import revoke
 from commands.file.update import update
 
+import utils
 
 from config import Config
 Config.configure()
@@ -44,8 +45,7 @@ def myrepl(ctx: typer.Context):
     try:
         repl(ctx)
     except Base as b:
-        err = typer.style(str(b), fg=typer.colors.RED, bold=True)
-        typer.echo(err)
+        utils.echo_error(str(b))
 
 
 if __name__ == "__main__":

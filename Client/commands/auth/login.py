@@ -1,9 +1,9 @@
 import typer
 from web.auth import login_user_req
-from web.user import get_user_detail_req
-from user_session import UserSession
+from session.user_session import UserSession
 from exceptions.server import ServerException
 
+import utils
 import json
 
 
@@ -17,4 +17,4 @@ def login_user(username: str = typer.Option(..., prompt=True),
         raise ServerException(json_resp["detail"])
 
     UserSession.login(json_resp["access_token"])
-    typer.echo("Login successful")
+    utils.echo_success("Login successful")

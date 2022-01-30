@@ -1,4 +1,4 @@
-from user_session import UserSession
+from session.user_session import UserSession
 import typer
 
 

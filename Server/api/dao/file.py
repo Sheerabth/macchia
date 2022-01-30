@@ -61,7 +61,7 @@ def delete_file_by_id_dao(file_id: uuid.UUID):
     session.commit()
 
 
-def get_file_by_id_dao(file_id: uuid.UUID):
+def get_file_by_id_dao(file_id: uuid.UUID) -> FileInDbSchema:
     file_orm = session.get(FileOrm, file_id)
     return FileInDbSchema.from_orm(file_orm)
 
@@ -76,5 +76,3 @@ def update_permission_dao(user: UserDbSchema, file: FileInDbSchema, new_permissi
     assoc = get_assoc_dao(user, file)
     assoc.access_rights = new_permission
     session.commit()
-    # session.refresh(assoc)
-    print("Session committed")

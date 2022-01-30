@@ -1,6 +1,6 @@
 from exceptions.server import ServerException
 from web.file import share_file
-from user_files import UserFiles
+from session.user_files import UserFiles
 import typer
 import json
 
