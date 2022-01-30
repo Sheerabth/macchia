@@ -14,7 +14,7 @@ app = FastAPI()
 
 @app.exception_handler(BlobStorageBaseException)
 async def base_exception_handler(request: Request, exception: BlobStorageBaseException):
-    if exception.headers:
+    if hasattr(exception, 'headers'):
         return JSONResponse(
             status_code=exception.status_code,
             content={"detail": str(exception)},

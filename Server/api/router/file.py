@@ -12,6 +12,7 @@ from core.schemas.file import File, FileInDb
 from core.schemas.user import UserDb, User
 from core.auth.auth import get_current_user
 
+from starlette.requests import Request
 from typing import List
 from core.schemas.permission import Permission
 
@@ -21,7 +22,7 @@ router = APIRouter()
 
 
 @router.post("/{file_name}", response_model=FileInDb)
-async def new_file(file_name: str, file: UploadFile, current_user: UserDb = Depends(get_current_user)):
+async def new_file(file_name: str, file: Request, current_user: UserDb = Depends(get_current_user)):
     created_file = await file_service.create_file_service(file_name, file, current_user)
     return created_file
 

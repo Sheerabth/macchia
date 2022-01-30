@@ -20,11 +20,13 @@ def download_file(file_id, file_name):
 
 def upload_file(file_path: str):
     file_name = os.path.basename(file_path)
-    files = {'file': open(file_path, 'rb')}
+    # files = {'file': open(file_path, 'rb')}
 
     session = UserSession.get_session()
     with click_spinner.spinner():
-        resp = session.post(Config.SERVER_URL + f"/file/{file_name}", files=files)
+        with open(file_path, 'rb') as file:
+            resp = session.post(Config.SERVER_URL + f"/file/{file_name}", data=file)
+
     return resp
 
 

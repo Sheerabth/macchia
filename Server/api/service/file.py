@@ -16,14 +16,19 @@ from core.exceptions import NotFoundException, ForbiddenException, BadRequestExc
 
 import shutil
 import gzip
+from starlette.requests import Request
 
 
-async def create_file_service(file_name: str, temp_file: TemporaryFile, user: UserDb) -> FileInDb:
+async def create_file_service(file_name: str, file: Request, user: UserDb) -> FileInDb:
     created_file = file_dao.create_file_dao(FileSchema(filename=file_name), Config.STORAGE_DIR, -1)
     file_dao.link_user_file_dao(user, created_file, AccessRights.OWNER)
 
     full_file_path = os.path.join(Config.STORAGE_DIR, str(created_file.id))
-    shutil.copyfileobj(temp_file.file, gzip.open(full_file_path, "wb"))
+    # shutil.copyfileobj(temp_file.file, gzip.open(full_file_path, "wb"))
+
+    compressed_file = gzip.open(full_file_path, "wb")
+    async for chunk in file.stream():
+        compressed_file.write(chunk)
 
     file_size = os.path.getsize(full_file_path)
     file_dao.update_file_size_dao(created_file.id, file_size)

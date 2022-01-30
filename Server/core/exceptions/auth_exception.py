@@ -7,7 +7,9 @@ class AuthException(BlobStorageBaseException):
                  status_code=status.HTTP_401_UNAUTHORIZED,
                  message="Unauthorized",
                  headers=None):
-        if headers is None:
-            headers = {"WWW-Authenticate": "Bearer"}
 
-        super(BlobStorageBaseException, self).__init__(status_code, message, headers)
+        super(AuthException, self).__init__(status_code, message)
+        if headers is None:
+            self.headers = {"WWW-Authenticate": "Bearer"}
+        else:
+            self.headers = headers
