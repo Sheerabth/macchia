@@ -18,6 +18,8 @@ class Config:
     ALGORITHM = None
     ACCESS_TOKEN_EXPIRE_MINUTES = None
 
+    LOGGER_CONF = None
+
     @staticmethod
     def configure():
         if not Config.configured:
@@ -34,6 +36,8 @@ class Config:
             Config.SECRET_KEY = os.getenv("SECRET_KEY")
             Config.ALGORITHM = os.getenv("ALGORITHM")
             Config.ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
+
+            Config.LOGGER_CONF = os.getenv("LOGGER_CONF")
 
             Config.configured = True
 

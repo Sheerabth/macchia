@@ -10,8 +10,8 @@ from humanize import naturalsize
 def ls(search_pattern: str = typer.Argument(None,
                                             help="Search pattern to match with file names while searching"),
        long_list: bool = typer.Option(False,
-                                      "-l"
-                                      "Display additional details about files")):
+                                      "-l",
+                                      help="Display additional details about files")):
     """
     List all accessible files
     """
