@@ -2,7 +2,7 @@ from uuid import UUID
 import os
 import urllib
 
-from fastapi import APIRouter, UploadFile, Depends
+from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 
 import api.service.file as file_service

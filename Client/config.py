@@ -13,7 +13,12 @@ class Config:
         if not Config.configured:
             load_dotenv()
 
-            Config.SERVER_URL = os.getenv("SERVER_URL")
+            url = os.getenv("SERVER_URL")
+            if url.endswith("/"):
+                Config.SERVER_URL = url[:-1]
+            else:
+                Config.SERVER_URL = url
+
             Config.DOWNLOAD_LOCATION = os.getenv("DOWNLOAD_LOCATION")
 
             Config.configured = True

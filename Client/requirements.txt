@@ -19,3 +19,5 @@ idna~=3.3
 urllib3~=1.26.8
 pycparser~=2.21
 setuptools~=58.5.3
+click_repl
+click_spinner

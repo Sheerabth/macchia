@@ -39,14 +39,19 @@ app.command(name="revoke")(revoke)
 app.command(name="update")(update)
 
 
-@app.command()
-def myrepl(ctx: typer.Context):
-    # while True:
-    try:
+@app.callback(invoke_without_command=True)
+def main(ctx: typer.Context):
+    if ctx.invoked_subcommand is None:
         repl(ctx)
-    except Base as b:
-        utils.echo_error(str(b))
 
 
 if __name__ == "__main__":
-    app()
+    while True:
+        try:
+            app()
+        except Base as b:
+            utils.echo_error(str(b))
+        except BaseException as be:
+            typer.echo(be)
+            break
+
