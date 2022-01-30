@@ -3,7 +3,7 @@ from web.user import get_user_files
 import json
 from exceptions.server import ServerException
 from tabulate import tabulate
-from dateutil import parser
+from dateutil import parser, tz
 from humanize import naturalsize
 
 
@@ -29,7 +29,12 @@ def ls(search_pattern: str = typer.Argument(None,
 
         for d in json_resp:
             d["file_size"] = naturalsize(d["file_size"])
-            d["created_time"] = parser.parse(d["created_time"]).strftime("%d %b %Y %H:%M")
+            created_datetime = parser.parse(d["created_time"])
+            from_zone = tz.tzutc()
+            to_zone = tz.tzlocal()
+            created_datetime = created_datetime.replace(tzinfo=from_zone)
+            converted_time = created_datetime.astimezone(to_zone)
+            d["created_time"] = converted_time.strftime("%d %b %Y %H:%M")
 
         for d in json_resp:
             file_table.append(tuple([d[x] for x in fields]))

@@ -15,7 +15,10 @@ session = Session()
 
 
 def create_file_dao(new_file: FileSchema, file_path: str, file_size: int) -> FileInDbSchema:
-    file_orm = FileOrm(**dict(new_file), filepath=file_path, file_size=file_size, created_time=datetime.datetime.now())
+    file_orm = FileOrm(**dict(new_file),
+                       filepath=file_path,
+                       file_size=file_size,
+                       created_time=datetime.datetime.utcnow())
     session.add(file_orm)
     session.commit()
 
