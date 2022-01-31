@@ -69,10 +69,23 @@ Click [here](https://drive.google.com/file/d/1tbDWKl9hdr7QoaxwOYT8NB_GX9F4qFXB/v
 8. Start the server with ``python main.py``
 9. Done! The client can be terminated by pressing ``Ctrl + D``
 
+*Note*: Occasional connection resets occur while using the deployed server. In such cases restart the client and re-run the command.
 
 ## Database Design
 
 ![Database Diagram](/readme-assets/ER_BlobStorage.png)
 
+## Access Control Rules
+
+| Operation     |     Owner      | Editor  |  Viewer  |
+|---------------|:--------------:|:-------:|:--------:|
+| Download     |       ✅        |    ✅    |    ✅     |
+| Rename    |       ✅        |   ✅      |    ❌      |
+| Update |       ✅        |     ✅    |      ❌    |
+|    Share    |       ✅        |   ❌      |     ❌     |
+|    Revoke    |       ✅        |    ❌     |      ❌    |
+|      Delete        |       ✅        |   ❌      |    ❌      |
 
 
+## Author
+* Saketh Raman KS
