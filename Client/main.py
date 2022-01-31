@@ -46,6 +46,10 @@ def main(ctx: typer.Context):
 
 
 if __name__ == "__main__":
+    utils.echo_success("Welcome to Blob-Storage CLI!")
+    typer.echo("Use Ctrl + D to exit from this prompt")
+    typer.echo("--help lists all available commands")
+
     while True:
         try:
             app()

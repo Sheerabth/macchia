@@ -24,6 +24,7 @@ The server compresses files using gzip compression before writing them to disk.
 * Support for streaming uploads and downloads
 * Easy to use CLI client
 * Compression using gzip
+* User based access control using three permission levels - Owner, Editor, and Viewer
 
 ## Setup Instructions
 
