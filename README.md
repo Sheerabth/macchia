@@ -26,11 +26,14 @@ The server compresses files using gzip compression before writing them to disk.
 * Compression using gzip
 * User based access control using three permission levels - Owner, Editor, and Viewer
 
+## Demo
+Click [here](https://drive.google.com/file/d/1tbDWKl9hdr7QoaxwOYT8NB_GX9F4qFXB/view?usp=sharing) for a demo of the application.
+
 ## Setup Instructions
 
 ### Server
 
-**Note**: An instance of the server is deployed at the IP address 20.127.120.66.
+**Note**: An instance of the server is deployed at the IP address 20.127.120.66 on port 4567
 
 #### Requirements
 * Python 3.8 

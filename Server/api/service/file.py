@@ -66,7 +66,7 @@ async def update_file_service(file_id: uuid.UUID, file: Request, current_user: U
         logger.info(f"File {file_id} updated by user {current_user.username}")
         return file_dao.get_file_by_id_dao(file_to_update.id)
     else:
-        raise ForbiddenException("Permission denied, EDITOR access is required to update files")
+        raise ForbiddenException(message="Permission denied, EDITOR access is required to update files")
 
 
 async def rename_file_service(file_id: uuid.UUID, file_rename: FileSchema, current_user: UserDb):
@@ -78,7 +78,7 @@ async def rename_file_service(file_id: uuid.UUID, file_rename: FileSchema, curre
                 file_dao.rename_file_by_id_dao(assoc.file.id, file_rename.filename)
                 logger.info(f"File {file_id} renamed by user {current_user.username}")
             else:
-                raise ForbiddenException("Permission denied, EDITOR access is required to rename files")
+                raise ForbiddenException(message="Permission denied, EDITOR access is required to rename files")
 
     if not found:
         raise NotFoundException()
@@ -92,7 +92,7 @@ async def share_file_service(file_id: uuid.UUID, current_user: UserDb, permissio
         raise NotFoundException()
 
     if assoc.access_rights != AccessRights.OWNER:
-        raise ForbiddenException("Permission denied, OWNER access is required to share files")
+        raise ForbiddenException(message="Permission denied, OWNER access is required to share files")
 
     # To check if the file has already been shared to the user
     shared_user_schema = user_dao.get_user_by_username_dao(permission.username)
@@ -119,7 +119,7 @@ async def revoke_file_service(file_id: uuid.UUID, current_user: UserDb, revoked_
         raise NotFoundException()
 
     if assoc.access_rights != AccessRights.OWNER:
-        raise ForbiddenException("Permission denied, EDITOR access is required to revoke shared files")
+        raise ForbiddenException(message="Permission denied, OWNER access is required to revoke shared files")
 
     revoke_user_schema = user_dao.get_user_by_username_dao(revoked_user.username)
     if not revoke_user_schema:
@@ -145,7 +145,7 @@ async def delete_file_by_id_service(file_id: uuid.UUID, current_user: UserDb):
                 os.remove(filepath)
                 logger.info(f"File {file_id} deleted by user {current_user.username}")
             else:
-                raise ForbiddenException("Permission denied, OWNER access is required to delete files")
+                raise ForbiddenException(message="Permission denied, OWNER access is required to delete files")
 
     if not found:
         raise NotFoundException()
