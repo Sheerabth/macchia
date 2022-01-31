@@ -80,11 +80,11 @@ Click [here](https://drive.google.com/file/d/1tbDWKl9hdr7QoaxwOYT8NB_GX9F4qFXB/v
 | Operation     |     Owner      | Editor  |  Viewer  |
 |---------------|:--------------:|:-------:|:--------:|
 | Download     |       ✅        |    ✅    |    ✅     |
-| Rename    |       ✅        |   ✅      |    ❌      |
-| Update |       ✅        |     ✅    |      ❌    |
-|    Share    |       ✅        |   ❌      |     ❌     |
-|    Revoke    |       ✅        |    ❌     |      ❌    |
-|      Delete        |       ✅        |   ❌      |    ❌      |
+| Rename    |       ✅        |   ✅      |    ✖     |
+| Update |       ✅        |     ✅    |      ✖    |
+|    Share    |       ✅        |   ✖      |     ✖     |
+|    Revoke    |       ✅        |    ✖     |      ✖    |
+|      Delete        |       ✅        |   ✖      |    ✖      |
 
 
 ## Author
