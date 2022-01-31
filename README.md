@@ -2,7 +2,7 @@
 
 Saketh Raman KS
 
-CW Hack 2022
+Cloudwiry Hackathon 2022
 
 ## Solution
 
@@ -11,6 +11,8 @@ The solution uses a FastAPI backend along with a CLI Frontend and PostgreSQL for
 Streaming is supported during both upload and download to enable transfer of large files.
 
 The server compresses files using gzip compression before writing them to disk.
+
+The solution is deployed on a Microsoft Azure Virtual Machine.
 
 ## Features
 * Supported operations:
