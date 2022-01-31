@@ -25,7 +25,7 @@ class UserFiles:
         while True:
             try:
                 typer.echo(tabulate(file_prompt_table, headers=["FileNo", "UUID", "File Name"]))
-                file_num = int(typer.prompt("Enter file number"))
+                file_num = int(typer.prompt("\nEnter file number"))
                 selected_file_id = file_prompt_table[file_num - 1][1]
                 break
             except IndexError:

@@ -8,6 +8,7 @@ import json
 def share():
     """
     Share a file in the blob storage to another user
+    If already shared, the newly specified permission overwrites the existing permission
     """
     selected_file = UserFiles.prompt_file()
 

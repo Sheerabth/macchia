@@ -20,6 +20,8 @@ class Config:
 
     LOGGER_CONF = None
 
+    SERVER_PORT = None
+
     @staticmethod
     def configure():
         if not Config.configured:
@@ -38,6 +40,8 @@ class Config:
             Config.ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
 
             Config.LOGGER_CONF = os.getenv("LOGGER_CONF")
+
+            Config.SERVER_PORT = int(os.getenv("SERVER_PORT"))
 
             Config.configured = True
 
