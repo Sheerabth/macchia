@@ -1,3 +1,5 @@
+from threading import Thread
+
 from config import Config
 
 from fastapi import FastAPI, Request
@@ -9,6 +11,8 @@ Config.configure()
 
 from api.router import file, auth, user
 from uvicorn.config import logger
+from core.sync.messaging import listen_to_queries, listen_to_responses
+
 
 app = FastAPI()
 
@@ -36,5 +40,13 @@ app.include_router(file.router, prefix="/file")
 app.include_router(user.router, prefix="/user")
 app.include_router(auth.router)
 
+query_thread = Thread(target=listen_to_queries)
+query_thread.start()
+response_thread = Thread(target=listen_to_responses)
+response_thread.start()
 
-uvicorn.run(app, host="0.0.0.0", port=Config.SERVER_PORT, log_config=Config.LOGGER_CONF)
+
+# app.middleware = app.middleware('http')(redirect_middleware)
+
+# Todo add back log config when deploying
+uvicorn.run(app, host="0.0.0.0", port=Config.SERVER_PORT)

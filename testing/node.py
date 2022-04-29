@@ -2,7 +2,7 @@ import json
 import pika
 import sys
 from threading import Thread, Lock, Semaphore
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import uvicorn
 import time
 
@@ -15,7 +15,7 @@ class DECSemaphore:
         self.waiting = 0
         self.count_lock = Lock()
 
-    def aquire(self):
+    def acquire(self):
         self.count_lock.acquire()
         self.waiting += 1
         self.count_lock.release()
@@ -116,6 +116,15 @@ def listen_to_responses():
 app = FastAPI()
 
 
+@app.get('/request_test/something/{path_id}')
+def req_test(req: Request, path_id: str):
+    print(path_id)
+    print(req.url.path)
+    print(req.url.scheme)
+    print(req.url.query)
+    print(req.url.components)
+
+
 @app.get("/get_cache")
 def get_cache():
     return cache
@@ -132,7 +141,7 @@ def get_ip(requested_id: str):
 
     if requested_id not in cache:
         semaphore = get_semaphore(requested_id)
-        semaphore.aquire()
+        semaphore.acquire()
 
     return {"ip_address": cache[requested_id]}
 

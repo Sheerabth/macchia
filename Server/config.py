@@ -20,7 +20,13 @@ class Config:
 
     LOGGER_CONF = None
 
+    SERVER_IP = None
     SERVER_PORT = None
+
+    NODE_ID = None
+
+    RABBITMQ_HOST = None
+    TOTAL_NODES = None
 
     @staticmethod
     def configure():
@@ -41,7 +47,12 @@ class Config:
 
             Config.LOGGER_CONF = os.getenv("LOGGER_CONF")
 
+            Config.SERVER_IP = os.getenv("SERVER_IP")
             Config.SERVER_PORT = int(os.getenv("SERVER_PORT"))
+            Config.NODE_ID = os.getenv('NODE_ID')
+
+            Config.RABBITMQ_HOST = os.getenv("RABBITMQ_HOST")
+            Config.TOTAL_NODES = int(os.getenv("TOTAL_NODES"))
 
             Config.configured = True
 
