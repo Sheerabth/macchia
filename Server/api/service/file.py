@@ -26,6 +26,7 @@ async def create_file_service(file_name: str, file: Request, user: UserDb, file_
     file_dao.link_user_file_dao(user, created_file, AccessRights.OWNER)
     full_file_path = os.path.join(Config.STORAGE_DIR, str(created_file.id))
 
+    # TODO add back gzip after debugging
     # with gzip.open(full_file_path, "wb") as compressed_file:
     print(full_file_path)
     with open(full_file_path, "wb") as compressed_file:
@@ -60,7 +61,9 @@ async def update_file_service(file_id: uuid.UUID, file: Request, current_user: U
     if assoc.access_rights == AccessRights.OWNER or assoc.access_rights == AccessRights.EDITOR:
         full_file_path = os.path.join(file_to_update.filepath, str(file_to_update.id))
 
-        with gzip.open(full_file_path, "wb") as compressed_file:
+        # TODO add back gzip after debugging
+        # with gzip.open(full_file_path, "wb") as compressed_file:
+        with open(full_file_path, "wb") as compressed_file:
             async for chunk in file.stream():
                 compressed_file.write(chunk)
 
