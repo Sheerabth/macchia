@@ -1,18 +1,14 @@
-# BlobStorage
+# Macchia
 
-Saketh Raman KS
+## Overview
 
-Cloudwiry Hackathon 2022
+Macchia is a distributed blob-storage system implemented by connecting several storage nodes through RabbitMQ channels. 
 
-## Solution
-
-The solution uses a FastAPI backend along with a CLI Frontend and PostgreSQL for the database.
+A single node is an independent storage unit that supports all file related CRUD operations, and sharing files to other users.
 
 Streaming is supported during both upload and download to enable transfer of large files.
 
 The server compresses files using gzip compression before writing them to disk.
-
-The solution is deployed on a Microsoft Azure Virtual Machine.
 
 ## Features
 * Supported operations:
@@ -28,8 +24,6 @@ The solution is deployed on a Microsoft Azure Virtual Machine.
 * Compression using gzip
 * User based access control using three permission levels - Owner, Editor, and Viewer
 
-## Demo
-Click [here](https://drive.google.com/file/d/1tbDWKl9hdr7QoaxwOYT8NB_GX9F4qFXB/view?usp=sharing) for a demo of the application.
 
 ## Setup Instructions
 
@@ -59,7 +53,7 @@ Click [here](https://drive.google.com/file/d/1tbDWKl9hdr7QoaxwOYT8NB_GX9F4qFXB/v
 #### Requirements
 * Python 3.8 
 * virtualenv
-* A BlobStorage server 
+* A Macchia server 
 
 1. Clone the repository to a local machine
 2. Install Python 3.8 if not installed already
@@ -89,5 +83,6 @@ Click [here](https://drive.google.com/file/d/1tbDWKl9hdr7QoaxwOYT8NB_GX9F4qFXB/v
 |      Delete        |       ✅        |   ✖      |    ✖      |
 
 
-## Author
+## Authors
 * Saketh Raman KS
+* Sheerabth O S

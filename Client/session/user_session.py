@@ -4,6 +4,11 @@ from config import Config
 import json
 
 
+class CustomSession(requests.Session):
+    def should_strip_auth(self, old_url, new_url):
+        return False
+
+
 class UserSession:
     logged_in = False
     session = None
@@ -13,7 +18,7 @@ class UserSession:
     @staticmethod
     def login(access_token):
         if not UserSession.logged_in:
-            UserSession.session = requests.Session()
+            UserSession.session = CustomSession()
             UserSession.session.headers.update({'Authorization': f'Bearer {access_token}'})
 
             resp = UserSession.session.get(Config.SERVER_URL + "/user/me")

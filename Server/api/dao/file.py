@@ -14,11 +14,13 @@ Session = DatabaseConnection.get_session()
 session = Session()
 
 
-def create_file_dao(new_file: FileSchema, file_path: str, file_size: int) -> FileInDbSchema:
+def create_file_dao(new_file: FileSchema, file_id: uuid.UUID, file_path: str, file_size: int) -> FileInDbSchema:
     file_orm = FileOrm(**dict(new_file),
                        filepath=file_path,
                        file_size=file_size,
+                       id=file_id,
                        created_time=datetime.datetime.utcnow())
+    print(file_orm)
     session.add(file_orm)
     session.commit()
 

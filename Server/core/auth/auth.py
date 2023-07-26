@@ -14,7 +14,7 @@ from core.schemas.user import UserDb
 from .hash import verify_password
 from ..exceptions.auth_exception import AuthException
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 def authenticate_user(username: str, password: str):

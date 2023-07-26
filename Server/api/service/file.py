@@ -21,17 +21,19 @@ from starlette.requests import Request
 from uvicorn.config import logger
 
 
-async def create_file_service(file_name: str, file: Request, user: UserDb) -> FileInDb:
-    created_file = file_dao.create_file_dao(FileSchema(filename=file_name), Config.STORAGE_DIR, -1)
+async def create_file_service(file_name: str, file: Request, user: UserDb, file_id: uuid.UUID) -> FileInDb:
+    created_file = file_dao.create_file_dao(FileSchema(filename=file_name), file_id, Config.STORAGE_DIR, -1)
     file_dao.link_user_file_dao(user, created_file, AccessRights.OWNER)
-
     full_file_path = os.path.join(Config.STORAGE_DIR, str(created_file.id))
 
     with gzip.open(full_file_path, "wb") as compressed_file:
+        print('Inside with')
         async for chunk in file.stream():
+            print('Streaming')
             compressed_file.write(chunk)
 
     file_size = os.path.getsize(full_file_path)
+
     file_dao.update_file_size_dao(created_file.id, file_size)
 
     logger.info(f"New file {file_name} with ID {created_file.id} created by user f{user.username}")
