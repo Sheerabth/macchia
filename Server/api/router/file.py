@@ -48,8 +48,7 @@ async def download_file(file_id: UUID, req: Request, current_user: UserDb = Depe
     def file_stream_generator(file_to_stream, block_size):
         full_file_path = os.path.join(file_to_stream.filepath, str(file_to_stream.id))
 
-        # with gzip.open(full_file_path, 'rb') as f:
-        with open(full_file_path, 'rb') as f:
+        with gzip.open(full_file_path, 'rb') as f:
             while True:
                 content = f.read(block_size)
                 if not content:

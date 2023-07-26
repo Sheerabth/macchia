@@ -48,5 +48,4 @@ response_thread.start()
 
 # app.middleware = app.middleware('http')(redirect_middleware)
 
-# Todo add back log config when deploying
 uvicorn.run(app, host="0.0.0.0", port=Config.SERVER_PORT)

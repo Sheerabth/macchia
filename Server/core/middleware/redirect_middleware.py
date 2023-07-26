@@ -6,8 +6,6 @@ from typing import Optional, Tuple
 
 
 async def redirect_middleware(file_id: UUID = Path(...)) -> Optional[Tuple]:
-    # TODO some hashing logic
-
     node_id = str(int(file_id.hex, 16) % Config.TOTAL_NODES)
 
     print("Node ID: ", node_id)
